@@ -838,7 +838,7 @@ class Thread:
     _initialized = False
 
     def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs=None, *, daemon=None):
+                 args=(), kwargs=None, *, daemon=None, holy=None):
         """This constructor should always be called with keyword arguments. Arguments are:
 
         *group* should be None; reserved for future extension when a ThreadGroup
@@ -892,6 +892,7 @@ class Thread:
         # Copy of sys.stderr used by self._invoke_excepthook()
         self._stderr = _sys.stderr
         self._invoke_excepthook = _make_invoke_excepthook()
+        self._holy = bool(holy)
         # For debugging and _after_fork()
         _dangling.add(self)
 
@@ -922,6 +923,8 @@ class Thread:
             status = "stopped"
         if self._daemonic:
             status += " daemon"
+        if self._holy:
+            status += " holy"
         if self._ident is not None:
             status += " %s" % self._ident
         return "<%s(%s, %s)>" % (self.__class__.__name__, self._name, status)
@@ -1024,7 +1027,8 @@ class Thread:
                 _sys.settrace(_trace_hook)
             if _profile_hook:
                 _sys.setprofile(_profile_hook)
-
+            if self._holy:
+                _sys.setholiness(True)
             try:
                 self.run()
             except:

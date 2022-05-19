@@ -200,6 +200,9 @@ struct _ts {
 
     /* The bottom-most frame on the stack. */
     _PyCFrame root_cframe;
+
+    /* Holiness */
+    int holy;
 };
 
 

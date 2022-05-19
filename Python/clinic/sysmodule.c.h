@@ -372,6 +372,62 @@ exit:
     return return_value;
 }
 
+PyDoc_STRVAR(sys_setholiness__doc__,
+"setholiness($module, holiness, /)\n"
+"--\n"
+"\n"
+"Set the calling thread\'s holiness.");
+
+#define SYS_SETHOLINESS_METHODDEF    \
+    {"setholiness", (PyCFunction)sys_setholiness, METH_O, sys_setholiness__doc__},
+
+static PyObject *
+sys_setholiness_impl(PyObject *module, int holiness);
+
+static PyObject *
+sys_setholiness(PyObject *module, PyObject *arg)
+{
+    PyObject *return_value = NULL;
+    int holiness;
+
+    holiness = PyObject_IsTrue(arg);
+    if (holiness < 0) {
+        goto exit;
+    }
+    return_value = sys_setholiness_impl(module, holiness);
+
+exit:
+    return return_value;
+}
+
+PyDoc_STRVAR(sys_getholiness__doc__,
+"getholiness($module, /)\n"
+"--\n"
+"\n"
+"Return the thread\'s holiness.");
+
+#define SYS_GETHOLINESS_METHODDEF    \
+    {"getholiness", (PyCFunction)sys_getholiness, METH_NOARGS, sys_getholiness__doc__},
+
+static int
+sys_getholiness_impl(PyObject *module);
+
+static PyObject *
+sys_getholiness(PyObject *module, PyObject *Py_UNUSED(ignored))
+{
+    PyObject *return_value = NULL;
+    int _return_value;
+
+    _return_value = sys_getholiness_impl(module);
+    if ((_return_value == -1) && PyErr_Occurred()) {
+        goto exit;
+    }
+    return_value = PyBool_FromLong((long)_return_value);
+
+exit:
+    return return_value;
+}
+
 PyDoc_STRVAR(sys_setrecursionlimit__doc__,
 "setrecursionlimit($module, limit, /)\n"
 "--\n"
@@ -1014,4 +1070,4 @@ sys_getandroidapilevel(PyObject *module, PyObject *Py_UNUSED(ignored))
 #ifndef SYS_GETANDROIDAPILEVEL_METHODDEF
     #define SYS_GETANDROIDAPILEVEL_METHODDEF
 #endif /* !defined(SYS_GETANDROIDAPILEVEL_METHODDEF) */
-/*[clinic end generated code: output=98efd34fd9b9b6ab input=a9049054013a1b77]*/
+/*[clinic end generated code: output=9629f7965570df36 input=a9049054013a1b77]*/

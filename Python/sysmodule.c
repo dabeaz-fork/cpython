@@ -1140,6 +1140,38 @@ sys_getswitchinterval_impl(PyObject *module)
 }
 
 /*[clinic input]
+sys.setholiness
+
+    holiness: bool
+    /
+
+Set the calling thread's holiness.
+[clinic start generated code]*/
+
+static PyObject *
+sys_setholiness_impl(PyObject *module, int holiness)
+/*[clinic end generated code: output=0d8500f9c4938d82 input=f13bc35b95ddf664]*/
+{
+  PyThreadState *tstate = _PyThreadState_GET();
+  tstate->holy = holiness;
+  Py_RETURN_NONE;
+}
+
+/*[clinic input]
+sys.getholiness -> bool
+
+Return the thread's holiness.
+[clinic start generated code]*/
+
+static int
+sys_getholiness_impl(PyObject *module)
+/*[clinic end generated code: output=e6ca5ff107d5586e input=6a61a376420f479e]*/
+{
+  PyThreadState *tstate = _PyThreadState_GET();
+  return tstate->holy;
+}
+
+/*[clinic input]
 sys.setrecursionlimit
 
     limit as new_limit: int
@@ -1971,6 +2003,8 @@ static PyMethodDef sys_methods[] = {
     SYS_MDEBUG_METHODDEF
     SYS_SETSWITCHINTERVAL_METHODDEF
     SYS_GETSWITCHINTERVAL_METHODDEF
+    SYS_SETHOLINESS_METHODDEF
+    SYS_GETHOLINESS_METHODDEF
     SYS_SETDLOPENFLAGS_METHODDEF
     {"setprofile", sys_setprofile, METH_O, setprofile_doc},
     SYS_GETPROFILE_METHODDEF
