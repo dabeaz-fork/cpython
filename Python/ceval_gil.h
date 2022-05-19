@@ -252,11 +252,11 @@ take_gil(PyThreadState *tstate)
 
         unsigned long interval = (gil->interval >= 1 ? gil->interval : 1);
         int timed_out = 0;
-	PyThreadState *gil_tstate = (PyThreadState *) _Py_atomic_load_relaxed(&gil->last_holder);
-	if (gil_tstate && (tstate->holy == 0) && (gil_tstate->holy)) {
-	  interval=1;
-	}
-	COND_TIMED_WAIT(gil->cond, gil->mutex, interval, timed_out);
+        PyThreadState *gil_tstate = (PyThreadState *) _Py_atomic_load_relaxed(&gil->last_holder);
+        if (gil_tstate && (tstate->holy == 0) && (gil_tstate->holy)) {
+          interval=1;
+        }
+        COND_TIMED_WAIT(gil->cond, gil->mutex, interval, timed_out);
 
         /* If we timed out and no switch occurred in the meantime, it is time
            to ask the GIL-holding thread to drop it. */
